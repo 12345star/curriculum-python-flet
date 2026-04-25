@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Currículum en Python con Flet | CEO & Master</title>
+  <meta name="description" content="Generador de currículum profesional en Python con Flet y ReportLab. Crea currículums en PDF desde una aplicación fácil de usar. Ideal para GitHub Pages y visibilidad en buscadores." />
+  <meta name="keywords" content="generador de currículum, Flet, Python, currículum PDF, reporte, ReportLab, aplicación de currículum, GitHub Pages" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Generador de Currículum en Python con Flet" />
+  <meta property="og:description" content="Aplicación para generar currículums en PDF con Python, Flet y ReportLab. Ideal para presentaciones profesionales y portafolios." />
+  <meta property="og:image" content="https://12345star.github.io/curriculum-python-flet/img/estructuraProyecto.png" />
+  <meta property="og:url" content="https://12345star.github.io/curriculum-python-flet/" />
+  <meta property="og:site_name" content="Generador de Currículum con Flet" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Generador de Currículum en Python con Flet" />
+  <meta name="twitter:description" content="Crea currículums profesionales en PDF usando Python con Flet y ReportLab." />
+  <meta name="twitter:image" content="https://12345star.github.io/curriculum-python-flet/img/estructuraProyecto.png" />
+  <!-- Add to home screen for Safari on iOS -->
+  <link rel="icon" type="image/x-icon" href="https://12345star.github.io/img/icon.ico">
+  <link rel="apple-touch-icon" href="https://12345star.github.io/img/icon.ico">
+  <!-- Autor -->
+  <meta name="author" content="David Salas Lorente">
+  <meta name="msapplication-TileImage" content="https://12345star.github.io/img/icon.png">
+  <meta name="msapplication-TileColor" content="#3367D6">
+  <!-- Eliminar una dependencia de google descontinuada -->
+  <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #111827;
+      background: #f0f4ff;
+      --bg: #ffffff;
+      --surface: rgba(255, 255, 255, 0.92);
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --surface-strong: #dbeafe;
+      --text-muted: #475569;
+      --border: rgba(37, 99, 235, 0.16);
+      --shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.12), transparent 28%),
+        var(--bg);
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .container {
+      width: min(1140px, 96%);
+      margin: 0 auto;
+      padding: 0 0 40px;
+    }
+
+    header {
+      padding: 40px 0 28px;
+    }
+
+    header .container {
+      display: grid;
+      gap: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 1.04;
+      color: #0f172a;
+    }
+
+    header p {
+      margin: 0;
+      max-width: 760px;
+      color: #475569;
+      font-size: 1rem;
+    }
+
+    main {
+      background: var(--surface);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 40px;
+      backdrop-filter: blur(16px);
+    }
+
+    section {
+      margin-top: 44px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 24px;
+      padding: 32px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(59, 130, 246, 0.08));
+      border: 1px solid rgba(37, 99, 235, 0.14);
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+      color: #0f172a;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: #334155;
+      font-size: 1.05rem;
+    }
+
+    .badge {
+      align-self: start;
+      display: inline-flex;
+      padding: 0.8rem 1.2rem;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.16);
+      color: #1d4ed8;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .button-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      padding: 14px 24px;
+      margin-top: 6px;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 14px;
+      box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22);
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 42px rgba(37, 99, 235, 0.26);
+      background: var(--primary-dark);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1.6rem;
+      color: #0f172a;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      width: 4.5rem;
+      height: 0.35rem;
+      margin-top: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+    }
+
+    p,
+    li,
+    pre,
+    code {
+      color: #475569;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.35rem;
+      list-style: disc;
+    }
+
+    li {
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+    }
+
+    pre {
+      margin: 18px 0 0;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: #eef2ff;
+      overflow-x: auto;
+      color: #0f172a;
+      font-size: 0.96rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      color: #0f172a;
+      font-size: 1.1rem;
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      margin-top: 12px;
+    }
+
+    section#instalacion pre,
+    section#instalacion code {
+      background: #eff6ff;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 30px 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.22);
+      display: grid;
+      gap: 18px;
+      color: #64748b;
+    }
+
+    footer div {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    footer a {
+      color: #2563eb;
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+
+    footer a:hover {
+      color: #1d4ed8;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 28px 20px;
+      }
+
+      header {
+        padding: 28px 0 18px;
+      }
+
+      .hero {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Generador de Currículum con Python y Flet</h1>
+      <p>Solución profesional creada por el desarrollador para generar currículums en PDF y maximizar la presencia digital.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <span class="badge">Desarrollador</span>
+      <h2>Tu aplicación de currículum profesional</h2>
+      <p>Este proyecto es una herramienta robusta para crear currículums modernos con Python, Flet y ReportLab. Está diseñada para ser fácil de usar, indexable en buscadores y lista para desplegarse en GitHub Pages.</p>
+      <a class="button-link" href="#instalacion" rel="noopener noreferrer" >Comenzar ahora</a>
+    </section>
+
+    <section>
+      <h2>Descripción</h2>
+      <p>La aplicación permite ingresar datos personales, perfil profesional, experiencia, formación, certificaciones, conocimientos técnicos, idiomas y logros. Luego genera un PDF con el currículum utilizando la librería <strong>ReportLab</strong>.</p>
+    </section>
+
+    <section>
+      <h2>Tecnologías</h2>
+      <ul>
+        <li>Python</li>
+        <li>Flet</li>
+        <li>ReportLab</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Estructura del proyecto</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Archivos clave</h3>
+          <ul>
+            <li><code>main.py</code> - Interfaz de usuario con Flet.</li>
+            <li><code>curriculum.py</code> - Lógica para crear PDF y modelo de datos.</li>
+            <li><code>requirements.txt</code> - Dependencias del proyecto.</li>
+            <li><code>demoCurriculum.pdf</code> - Ejemplo de currículum generado.</li>
+            <li><code>img/</code> - Imágenes de vista y estructura.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Imágenes de la vista</h3>
+          <img src="./img/estructuraProyecto.png" alt="Estructura del proyecto" />
+          <img src="./img/principalUno.png" alt="Pantalla principal 1" style="margin-top: 12px;" />
+          <img src="./img/principalDos.png" alt="Pantalla principal 2" style="margin-top: 12px;" />
+        </div>
+      </div>
+    </section>
+
+    <section id="instalacion">
+      <h2>Instalación</h2>
+      <p>Para instalar el proyecto localmente, sigue estos pasos:</p>
+      <pre><code>python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt</code></pre>
+    </section>
+
+    <section>
+      <h2>Uso</h2>
+      <p>Ejecuta la aplicación con el siguiente comando:</p>
+      <pre><code>python main.py</code></pre>
+      <p>La interfaz abrirá un formulario donde puedes completar los datos y generar el PDF del currículum.</p>
+    </section>
+
+    <section>
+      <h2>Enlaces</h2>
+      <ul>
+        <li><a href="./main.py" target="_blank" rel="noopener noreferrer">main.py</a> - Archivo principal de la app.</li>
+        <li><a href="./curriculum.py" target="_blank" rel="noopener noreferrer">curriculum.py</a> - Generador de PDF y estructura de datos.</li>
+        <li><a href="./requirements.txt" target="_blank" rel="noopener noreferrer">requirements.txt</a> - Lista de dependencias.</li>
+        <li><a href="./demoCurriculum.pdf" target="_blank" rel="noopener noreferrer">demoCurriculum.pdf</a> - Ejemplo de currículum generado.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Vista</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Estructura del proyecto principal</h3>
+          <h4>Organización del proyecto donde esta la lógica principal y donde se va a crear el PDF</h4>
+          <img src="./img/estructuraProyecto.png" alt="Estructura del proyecto" />
+        </div>
+        <div class="card">
+          <h3>Vista principal del APP</h3>
+          <h4>Vista principal del APP donde se va a ingresar toda la información para crear el PDF</h4>
+          <img src="./img/principalUno.png" alt="Pantalla principal 1" />
+        </div>
+        <div class="card">
+          <h3>Vista principal del APP 2</h3>
+          <h4>Vista principal donde se va a ingresar toda la información para crear el PDF, es la paste de abajo donde esta las acciones de los botones.</h4>
+          <img src="./img/principalDos.png" alt="Pantalla principal 2" />
+        </div>
+        <div class="card">
+          <h3>Vista previa en APP</h3>
+            <h4>Vista previa del PDF generado dentro de la aplicación, para que el usuario pueda ver como va quedando su currículum antes de descargarlo.</h4>
+          <img src="./img/vistaPrevia.png" alt="Vista previa" />
+        </div>
+        <div class="card">
+          <h3>Mensaje de confirmación</h3>
+            <h4>Mensaje de confirmación que se muestra al usuario cuando el PDF se ha generado correctamente. El cual se guarda en la carpeta del proyecto.</h4>
+          <img src="./img/btnGeneradorReporte.png" alt="Botón generador" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div>
+      <p><strong>Desarrollador:</strong> David Salas Lorente</p>
+      <p>Desarrollador responsable del proyecto y líder técnico.</p>
+    </div>
+    <div>
+      <p><a href="https://github.com/12345star" target="_blank" rel="noopener">Repositorio GitHub</a></p>
+      <p>© 2026 David Salas. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
