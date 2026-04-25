@@ -47,10 +47,8 @@ La interfaz abrirá un formulario donde puedes completar los datos y generar el 
 
 ## Enlaces
 
-- [main.py](./main.py) - Archivo principal de la app.
-- [curriculum.py](./curriculum.py) - Generador de PDF y estructura de datos.
-- [requirements.txt](./requirements.txt) - Lista de dependencias.
-- [demoCurriculum.pdf](./demoCurriculum.pdf) - Ejemplo de currículum generado.
+- [Pagina DEMO](https://12345star.github.io/curriculum-python-flet/) - WEB.
+
 
 ## Vista
 
